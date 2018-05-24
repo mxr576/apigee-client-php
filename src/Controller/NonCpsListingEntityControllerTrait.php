@@ -39,7 +39,7 @@ trait NonCpsListingEntityControllerTrait
             'expand' => 'true',
         ];
         $uri = $this->getBaseEndpointUri()->withQuery(http_build_query($query_params));
-        $response = $this->client->get($uri);
+        $response = $this->client->get($uri)->wait();
         $responseArray = $this->responseToArray($response);
         // Ignore entity type key from response, ex.: apiProduct.
         $responseArray = reset($responseArray);

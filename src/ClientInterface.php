@@ -19,16 +19,16 @@
 namespace Apigee\Edge;
 
 use Apigee\Edge\HttpClient\Utility\JournalInterface;
-use Http\Client\HttpClient;
+use Http\Client\HttpAsyncClient;
 use Http\Message\UriFactory;
-use Psr\Http\Message\ResponseInterface;
+use Http\Promise\Promise;
 
 /**
  * Interface ClientInterface.
  *
  * Describes the public methods of an Apigee Edge API client.
  */
-interface ClientInterface extends HttpClient
+interface ClientInterface extends HttpAsyncClient
 {
     /**
      * Allows access to the last request, response and exception.
@@ -71,9 +71,9 @@ interface ClientInterface extends HttpClient
      *
      * @throws \Http\Client\Exception
      *
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return \Http\Promise\Promise
      */
-    public function get($uri, array $headers = []): ResponseInterface;
+    public function get($uri, array $headers = []): Promise;
 
     /**
      * Sends a HEAD request.
@@ -83,9 +83,9 @@ interface ClientInterface extends HttpClient
      *
      * @throws \Http\Client\Exception
      *
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return \Http\Promise\Promise
      */
-    public function head($uri, array $headers = []): ResponseInterface;
+    public function head($uri, array $headers = []): Promise;
 
     /**
      * Sends a POST request.
@@ -96,9 +96,9 @@ interface ClientInterface extends HttpClient
      *
      * @throws \Http\Client\Exception
      *
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return \Http\Promise\Promise
      */
-    public function post($uri, $body = null, array $headers = []): ResponseInterface;
+    public function post($uri, $body = null, array $headers = []): Promise;
 
     /**
      * Sends a PUT request.
@@ -109,9 +109,9 @@ interface ClientInterface extends HttpClient
      *
      * @throws \Http\Client\Exception
      *
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return \Http\Promise\Promise
      */
-    public function put($uri, $body = null, array $headers = []): ResponseInterface;
+    public function put($uri, $body = null, array $headers = []): Promise;
 
     /**
      * Sends a DELETE request.
@@ -122,7 +122,7 @@ interface ClientInterface extends HttpClient
      *
      * @throws \Http\Client\Exception
      *
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return \Http\Promise\Promise
      */
-    public function delete($uri, $body = null, array $headers = []): ResponseInterface;
+    public function delete($uri, $body = null, array $headers = []): Promise;
 }

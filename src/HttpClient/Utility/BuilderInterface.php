@@ -19,7 +19,7 @@
 namespace Apigee\Edge\HttpClient\Utility;
 
 use Http\Client\Common\Plugin;
-use Http\Client\HttpClient;
+use Http\Client\HttpAsyncClient;
 
 /**
  * Interface BuilderInterface.
@@ -29,9 +29,9 @@ use Http\Client\HttpClient;
 interface BuilderInterface
 {
     /**
-     * @return \Http\Client\HttpClient
+     * @return \Http\Client\HttpAsyncClient
      */
-    public function getHttpClient(): HttpClient;
+    public function getHttpClient(): HttpAsyncClient;
 
     /**
      * @param array $headers Associate array of HTTP headers.

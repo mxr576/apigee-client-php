@@ -73,7 +73,7 @@ class StatsController extends AbstractController implements StatsControllerInter
                 '_optimized' => $optimized,
             ] + $this->normalizer->normalize($query);
         $uri = $this->getBaseEndpointUri()->withQuery(http_build_query($query_params));
-        $response = $this->responseToArray($this->client->get($uri));
+        $response = $this->responseToArray($this->client->get($uri)->wait());
 
         return $response['Response'];
     }
@@ -136,7 +136,7 @@ class StatsController extends AbstractController implements StatsControllerInter
         $path = $this->getBaseEndpointUri()->getPath() . implode(',', $dimensions);
         $uri = $this->getBaseEndpointUri()->withPath($path)
             ->withQuery(http_build_query($query_params));
-        $response = $this->responseToArray($this->client->get($uri));
+        $response = $this->responseToArray($this->client->get($uri)->wait());
 
         return $response['Response'];
     }

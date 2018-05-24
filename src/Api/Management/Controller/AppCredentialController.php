@@ -79,7 +79,7 @@ abstract class AppCredentialController extends EntityController implements AppCr
             // Just to spare some extra lines of code.
             $this->getEntityEndpointUri('create'),
             (string) json_encode((object) ['consumerKey' => $consumerKey, 'consumerSecret' => $consumerSecret])
-        );
+        )->wait();
 
         return $this->entityTransformer->deserialize(
             (string) $response->getBody(),
@@ -107,7 +107,7 @@ abstract class AppCredentialController extends EntityController implements AppCr
                 'keyExpiresIn' => $keyExpiresIn,
                 'scopes' => $scopes,
             ])
-        );
+        )->wait();
         // It returns a complete developer app entity, but we only returns the newly created credential for the
         // sake of consistency.
         $responseArray = $this->responseToArray($response);
@@ -127,7 +127,7 @@ abstract class AppCredentialController extends EntityController implements AppCr
         $response = $this->client->post(
             $this->getEntityEndpointUri($consumerKey),
             (string) json_encode((object) ['apiProducts' => $apiProducts])
-        );
+        )->wait();
 
         return $this->entityTransformer->deserialize(
             (string) $response->getBody(),
@@ -144,7 +144,7 @@ abstract class AppCredentialController extends EntityController implements AppCr
         $uri = $this->getBaseEndpointUri()
             ->withPath("{$this->getBaseEndpointUri()}/keys/{$consumerKey}/apiproducts/{$apiProduct}")
             ->withQuery(http_build_query(['action' => $status]));
-        $this->client->post($uri, null, ['Content-Type' => 'application/octet-stream']);
+        $this->client->post($uri, null, ['Content-Type' => 'application/octet-stream'])->wait();
     }
 
     /**
@@ -153,7 +153,7 @@ abstract class AppCredentialController extends EntityController implements AppCr
     public function deleteApiProduct(string $consumerKey, string $apiProduct): EntityInterface
     {
         $uri = $this->getBaseEndpointUri()->withPath("{$this->getBaseEndpointUri()}/keys/{$consumerKey}/apiproducts/{$apiProduct}");
-        $response = $this->client->delete($uri);
+        $response = $this->client->delete($uri)->wait();
 
         return $this->entityTransformer->deserialize(
             (string) $response->getBody(),
@@ -170,7 +170,7 @@ abstract class AppCredentialController extends EntityController implements AppCr
         $response = $this->client->put(
             $this->getEntityEndpointUri($consumerKey),
             (string) json_encode((object) ['scopes' => $scopes])
-        );
+        )->wait();
 
         return $this->entityTransformer->deserialize(
             (string) $response->getBody(),

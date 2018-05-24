@@ -33,7 +33,7 @@ trait EntityCrudOperationsControllerTrait
      */
     public function load(string $entityId): EntityInterface
     {
-        $response = $this->client->get($this->getEntityEndpointUri($entityId));
+        $response = $this->client->get($this->getEntityEndpointUri($entityId))->wait();
 
         return $this->entityTransformer->deserialize(
             (string) $response->getBody(),
@@ -50,7 +50,7 @@ trait EntityCrudOperationsControllerTrait
         $response = $this->client->post(
             $this->getBaseEndpointUri(),
             $this->entityTransformer->serialize($entity, 'json')
-        );
+        )->wait();
         $this->setPropertiesFromResponse($response, $entity);
     }
 
@@ -66,7 +66,7 @@ trait EntityCrudOperationsControllerTrait
         $response = $this->client->put(
             $uri,
             $this->entityTransformer->serialize($entity, 'json')
-        );
+        )->wait();
         $this->setPropertiesFromResponse($response, $entity);
     }
 
@@ -75,7 +75,7 @@ trait EntityCrudOperationsControllerTrait
      */
     public function delete(string $entityId): EntityInterface
     {
-        $response = $this->client->delete($this->getEntityEndpointUri($entityId));
+        $response = $this->client->delete($this->getEntityEndpointUri($entityId))->wait();
 
         return $this->entityTransformer->deserialize(
             (string) $response->getBody(),

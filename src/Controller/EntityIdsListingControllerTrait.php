@@ -34,7 +34,7 @@ trait EntityIdsListingControllerTrait
             'expand' => 'false',
         ];
         $uri = $this->getBaseEndpointUri()->withQuery(http_build_query($query_params));
-        $response = $this->client->get($uri);
+        $response = $this->client->get($uri)->wait();
 
         return $this->responseToArray($response);
     }

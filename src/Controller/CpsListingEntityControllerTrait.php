@@ -43,7 +43,7 @@ trait CpsListingEntityControllerTrait
             $query_params['count'] = $cpsLimit->getLimit();
         }
         $uri = $this->getBaseEndpointUri()->withQuery(http_build_query($query_params));
-        $response = $this->client->get($uri);
+        $response = $this->client->get($uri)->wait();
         $responseArray = $this->responseToArray($response);
         // Ignore entity type key from response, ex.: developer.
         $responseArray = reset($responseArray);
@@ -72,7 +72,7 @@ trait CpsListingEntityControllerTrait
             $query_params['count'] = $cpsLimit->getLimit();
         }
         $uri = $this->getBaseEndpointUri()->withQuery(http_build_query($query_params));
-        $response = $this->client->get($uri);
+        $response = $this->client->get($uri)->wait();
 
         return $this->responseToArray($response);
     }

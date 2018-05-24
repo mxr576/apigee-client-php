@@ -28,13 +28,13 @@ use Http\Client\Common\Plugin\AuthenticationPlugin;
 use Http\Client\Common\Plugin\BaseUriPlugin;
 use Http\Client\Common\Plugin\HeaderDefaultsPlugin;
 use Http\Client\Common\Plugin\HistoryPlugin;
-use Http\Client\HttpClient;
+use Http\Client\HttpAsyncClient;
 use Http\Discovery\MessageFactoryDiscovery;
 use Http\Discovery\UriFactoryDiscovery;
 use Http\Message\Authentication;
 use Http\Message\UriFactory;
+use Http\Promise\Promise;
 use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -180,57 +180,57 @@ class Client implements ClientInterface
     /**
      * @inheritdoc
      */
-    public function get($uri, array $headers = []): ResponseInterface
+    public function get($uri, array $headers = []): Promise
     {
-        return $this->send('GET', $uri, $headers, null);
+        return $this->sendAsyncRequest($this->requestFactory->createRequest('GET', $uri, $headers));
     }
 
     /**
      * @inheritdoc
      */
-    public function head($uri, array $headers = []): ResponseInterface
+    public function head($uri, array $headers = []): Promise
     {
-        return $this->send('HEAD', $uri, $headers, null);
+        return $this->sendAsyncRequest($this->requestFactory->createRequest('HEAD', $uri, $headers));
     }
 
     /**
      * @inheritdoc
      */
-    public function post($uri, $body = null, array $headers = []): ResponseInterface
+    public function post($uri, $body = null, array $headers = []): Promise
     {
         if (!isset($headers['Content-Type'])) {
             $headers['Content-Type'] = 'application/json; charset=utf-8';
         }
 
-        return $this->send('POST', $uri, $headers, $body);
+        return $this->sendAsyncRequest($this->requestFactory->createRequest('POST', $uri, $headers, $body));
     }
 
     /**
      * @inheritdoc
      */
-    public function put($uri, $body = null, array $headers = []): ResponseInterface
+    public function put($uri, $body = null, array $headers = []): Promise
     {
         if (!isset($headers['Content-Type'])) {
             $headers['Content-Type'] = 'application/json; charset=utf-8';
         }
 
-        return $this->send('PUT', $uri, $headers, $body);
+        return $this->sendAsyncRequest($this->requestFactory->createRequest('PUT', $uri, $headers, $body));
     }
 
     /**
      * @inheritdoc
      */
-    public function delete($uri, $body = null, array $headers = []): ResponseInterface
+    public function delete($uri, $body = null, array $headers = []): Promise
     {
-        return $this->send('DELETE', $uri, $headers, $body);
+        return $this->sendAsyncRequest($this->requestFactory->createRequest('DELETE', $uri, $headers, $body));
     }
 
     /**
      * @inheritdoc
      */
-    public function sendRequest(RequestInterface $request): ResponseInterface
+    public function sendAsyncRequest(RequestInterface $request): Promise
     {
-        return $this->getHttpClient()->sendRequest($request);
+        return $this->getHttpClient()->sendAsyncRequest($request);
     }
 
     /**
@@ -332,16 +332,6 @@ class Client implements ClientInterface
     }
 
     /**
-     * @inheritdoc
-     *
-     * @throws \Http\Client\Exception
-     */
-    private function send($method, $uri, array $headers = [], $body = null): ResponseInterface
-    {
-        return $this->sendRequest($this->requestFactory->createRequest($method, $uri, $headers, $body));
-    }
-
-    /**
      * Returns Apigee Edge endpoint as an URI.
      *
      * @return \Psr\Http\Message\UriInterface
@@ -354,7 +344,7 @@ class Client implements ClientInterface
     /**
      * @inheritdoc
      */
-    private function getHttpClient(): HttpClient
+    private function getHttpClient(): HttpAsyncClient
     {
         if ($this->httpClientNeedsBuild) {
             foreach ($this->getDefaultPlugins() as $plugin) {

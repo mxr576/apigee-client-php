@@ -33,7 +33,6 @@ use Psr\Http\Message\UriInterface;
 /**
  * Class AbstractEntityControllerTest.
  *
- *
  * @group controller
  * @group mock
  * @group offline
@@ -94,7 +93,7 @@ class AbstractControllerTest extends TestCase
     public function testParseResponseWithUnknownContentType(): void
     {
         static::$mockClient->addResponse(new Response(200, [], '<xml></xml>'));
-        $response = static::$client->sendRequest(new Request('GET', ''));
+        $response = static::$client->sendAsyncRequest(new Request('GET', ''))->wait();
         static::$stub->toArray($response);
     }
 
@@ -104,7 +103,7 @@ class AbstractControllerTest extends TestCase
     public function testParseResponseWithInvalidJson(): void
     {
         static::$mockClient->addResponse(new Response(200, ['Content-Type' => 'application/json'], ''));
-        $response = static::$client->sendRequest(new Request('GET', ''));
+        $response = static::$client->sendAsyncRequest(new Request('GET', ''))->wait();
         static::$stub->toArray($response);
     }
 }

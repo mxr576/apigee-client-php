@@ -63,7 +63,7 @@ class DeveloperController extends CpsLimitEntityController implements DeveloperC
     public function getDeveloperByApp(string $appName): DeveloperInterface
     {
         $uri = $this->getBaseEndpointUri()->withQuery(http_build_query(['app' => $appName]));
-        $responseArray = $this->responseToArray($this->client->get($uri));
+        $responseArray = $this->responseToArray($this->client->get($uri)->wait());
         // When developer has not found by app we are still getting back HTTP 200 with an empty developer array.
         if (empty($responseArray['developer'])) {
             throw new DeveloperNotFoundException(

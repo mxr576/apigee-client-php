@@ -74,7 +74,7 @@ class OauthTest extends TestCase
     {
         // Auth server respond with 401 for the provided client id and secret.
         static::$httpClient->addResponse(new Response(401));
-        $this->client->get('');
+        $this->client->get('')->wait();
     }
 
     /**
@@ -84,7 +84,7 @@ class OauthTest extends TestCase
     {
         // Auth server is unavailable.
         static::$httpClient->addException(new TransferException());
-        $this->client->get('');
+        $this->client->get('')->wait();
     }
 
     public function testOauthReAuthenticationAfterExpiredAccessToken(): void
@@ -107,7 +107,7 @@ class OauthTest extends TestCase
         static::$httpClient->addResponse(new Response(200, ['Content-Type' => 'application/json'], json_encode((object) $body)));
         // Successful response to an authorised API call from API server.
         static::$httpClient->addResponse(new Response(200));
-        $this->client->get('');
+        $this->client->get('')->wait();
         /** @var \Psr\Http\Message\RequestInterface[] $requests */
         $requests = $this->journal->getRequests();
         // Client credential and secret has been sent to the authorization server.
@@ -151,7 +151,7 @@ class OauthTest extends TestCase
         static::$httpClient->addResponse(new Response(200, ['Content-Type' => 'application/json'], json_encode((object) $body)));
         // Successful response to an authorised API call from API server.
         static::$httpClient->addResponse(new Response(200));
-        $this->client->get('');
+        $this->client->get('')->wait();
         /** @var \Psr\Http\Message\RequestInterface[] $requests */
         $requests = $this->journal->getRequests();
         // Client credential and secret has been sent to the authorization server.
@@ -192,7 +192,7 @@ class OauthTest extends TestCase
         static::$httpClient->addResponse(new Response(200, ['Content-Type' => 'application/json'], json_encode((object) $body)));
         // API server answers with a server error.
         static::$httpClient->addResponse(new Response(500));
-        $this->client->get('');
+        $this->client->get('')->wait();
     }
 
     /**
@@ -214,6 +214,6 @@ class OauthTest extends TestCase
         static::$httpClient->addResponse(new Response(401));
         // API server answers with a server error.
         static::$httpClient->addResponse(new Response(500));
-        $this->client->get('');
+        $this->client->get('')->wait();
     }
 }

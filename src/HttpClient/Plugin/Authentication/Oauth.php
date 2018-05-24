@@ -179,7 +179,7 @@ class Oauth implements Authentication
         }
 
         try {
-            $response = $this->authClient()->post('', http_build_query($body), ['Content-Type' => 'application/x-www-form-urlencoded']);
+            $response = $this->authClient()->post('', http_build_query($body), ['Content-Type' => 'application/x-www-form-urlencoded'])->wait();
             $this->tokenStorage->saveToken(json_decode((string) $response->getBody(), true));
         } catch (Exception $e) {
             throw new OauthAuthenticationException($e->getMessage(), $e->getCode(), $e);

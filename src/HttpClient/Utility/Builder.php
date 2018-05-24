@@ -18,9 +18,11 @@
 
 namespace Apigee\Edge\HttpClient\Utility;
 
+use Http\Client\Common\EmulatedHttpAsyncClient;
 use Http\Client\Common\Plugin;
 use Http\Client\Common\Plugin\HeaderAppendPlugin;
 use Http\Client\Common\PluginClient;
+use Http\Client\HttpAsyncClient;
 use Http\Client\HttpClient;
 use Http\Discovery\HttpClientDiscovery;
 use Http\Discovery\MessageFactoryDiscovery;
@@ -35,16 +37,16 @@ use Http\Message\StreamFactory;
  */
 class Builder implements BuilderInterface
 {
-    /** @var HttpClient */
+    /** @var \Http\Client\HttpAsyncClient */
     private $httpClient;
 
-    /** @var PluginClient */
+    /** @var \Http\Client\Common\PluginClient */
     private $pluginClient;
 
-    /** @var StreamFactory */
+    /** @var \Http\Message\StreamFactory */
     private $streamFactory;
 
-    /** @var RequestFactory */
+    /** @var \Http\Message\RequestFactory */
     private $requestFactory;
 
     /** @var array */
@@ -63,16 +65,24 @@ class Builder implements BuilderInterface
     /**
      * Builder constructor.
      *
-     * @param \Http\Client\HttpClient|null $httpClient
+     * @param \Http\Client\HttpAsyncClient|null $httpClient
      * @param \Http\Message\RequestFactory|null $requestFactory
      * @param \Http\Message\StreamFactory|null $streamFactory
+     *
+     * @psalm-suppress InvalidPropertyAssignmentValue - $httpClient always instance of HttpAsyncClient
      */
     public function __construct(
-        HttpClient $httpClient = null,
+        HttpAsyncClient $httpClient = null,
         RequestFactory $requestFactory = null,
         StreamFactory $streamFactory = null
     ) {
-        $this->httpClient = $httpClient ?: HttpClientDiscovery::find();
+        if (null === $httpClient) {
+            $httpClient = HttpClientDiscovery::find();
+            if ($httpClient instanceof HttpClient && !$httpClient instanceof HttpAsyncClient) {
+                $httpClient = new EmulatedHttpAsyncClient($httpClient);
+            }
+        }
+        $this->httpClient = $httpClient;
         $this->requestFactory = $requestFactory ?: MessageFactoryDiscovery::find();
         $this->streamFactory = $streamFactory ?: StreamFactoryDiscovery::find();
     }
@@ -80,7 +90,7 @@ class Builder implements BuilderInterface
     /**
      * @inheritdoc
      */
-    public function getHttpClient(): HttpClient
+    public function getHttpClient(): HttpAsyncClient
     {
         if ($this->rebuild()) {
             $this->pluginClient = new PluginClient($this->httpClient, $this->plugins);

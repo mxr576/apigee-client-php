@@ -31,6 +31,6 @@ trait StatusAwareEntityControllerTrait
     public function setStatus(string $entityId, string $status): void
     {
         $uri = $this->getEntityEndpointUri($entityId)->withQuery(http_build_query(['action' => $status]));
-        $this->client->post($uri, null, ['Content-Type' => 'application/octet-stream']);
+        $this->client->post($uri, null, ['Content-Type' => 'application/octet-stream'])->wait();
     }
 }

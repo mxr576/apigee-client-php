@@ -22,7 +22,6 @@ use GuzzleHttp\RequestOptions;
 use GuzzleHttp\TransferStats;
 use Http\Adapter\Guzzle6\Client;
 use Http\Client\HttpAsyncClient;
-use Http\Client\HttpClient;
 use Http\Message\Formatter;
 use Http\Message\Formatter\SimpleFormatter;
 use Psr\Http\Message\RequestInterface;
@@ -37,7 +36,7 @@ use Psr\Log\NullLogger;
  *
  * @see https://github.com/guzzle/guzzle/pull/1202
  */
-class DebuggerClient implements HttpClient, HttpAsyncClient
+class DebuggerClient implements HttpAsyncClient
 {
     /**
      * @var \GuzzleHttp\ClientInterface
@@ -101,13 +100,5 @@ class DebuggerClient implements HttpClient, HttpAsyncClient
     public function sendAsyncRequest(RequestInterface $request)
     {
         return $this->client->sendAsyncRequest($request);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function sendRequest(RequestInterface $request)
-    {
-        return $this->client->sendRequest($request);
     }
 }

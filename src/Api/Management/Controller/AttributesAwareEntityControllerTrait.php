@@ -36,7 +36,7 @@ trait AttributesAwareEntityControllerTrait
      */
     public function getAttributes(string $entityId): AttributesProperty
     {
-        $responseArray = $this->responseToArray($this->client->get($this->getEntityAttributesUri($entityId)));
+        $responseArray = $this->responseToArray($this->client->get($this->getEntityAttributesUri($entityId))->wait());
 
         return $this->getAttributesPropertyDenormalizer()->denormalize(
             $responseArray['attribute'],
@@ -49,9 +49,7 @@ trait AttributesAwareEntityControllerTrait
      */
     public function getAttribute(string $entityId, string $name): string
     {
-        $responseArray = $this->responseToArray($this->client->get(
-            $this->getEntityAttributeUri($entityId, $name)
-        ));
+        $responseArray = $this->responseToArray($this->client->get($this->getEntityAttributeUri($entityId, $name))->wait());
 
         return $responseArray['value'];
     }
@@ -67,7 +65,7 @@ trait AttributesAwareEntityControllerTrait
                 (string) json_encode((object) [
                     'attribute' => $this->getAttributesPropertyNormalizer()->normalize($attributes),
                 ])
-            )
+            )->wait()
         );
 
         return $this->getAttributesPropertyDenormalizer()->denormalize(
@@ -85,7 +83,7 @@ trait AttributesAwareEntityControllerTrait
         $responseArray = $this->responseToArray($this->client->post(
             $this->getEntityAttributeUri($entityId, $name),
             $value
-        ));
+        )->wait());
 
         return $responseArray['value'];
     }
@@ -95,7 +93,7 @@ trait AttributesAwareEntityControllerTrait
      */
     public function deleteAttribute(string $entityId, string $name): void
     {
-        $this->client->delete($this->getEntityAttributeUri($entityId, $name));
+        $this->client->delete($this->getEntityAttributeUri($entityId, $name))->wait();
     }
 
     protected function getAttributesPropertyNormalizer(): KeyValueMapNormalizer

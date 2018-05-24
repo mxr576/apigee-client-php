@@ -69,7 +69,7 @@ class BuilderTest extends TestCase
         $client = $builder->getHttpClient();
         $builder->setHeaders($headers);
         $this->assertNotEquals($client, $builder->getHttpClient());
-        $builder->getHttpClient()->sendRequest(new Request('GET', 'http://example.com'));
+        $builder->getHttpClient()->sendAsyncRequest(new Request('GET', 'http://example.com'))->wait();
         $sent_request = self::$httpClient->getLastRequest();
         $this->assertEquals($sent_request->getHeaderLine('Foo'), $headers['Foo']);
 
@@ -88,7 +88,7 @@ class BuilderTest extends TestCase
         $builder->setHeaderValue('Apigee', 'Edge');
         $this->assertNotEquals($client, $builder->getHttpClient());
         $request = new Request('GET', 'http://example.com');
-        $builder->getHttpClient()->sendRequest($request);
+        $builder->getHttpClient()->sendAsyncRequest($request)->wait();
         $sent_request = self::$httpClient->getLastRequest();
         $this->assertEquals('bar, baz', $sent_request->getHeaderLine('Foo'));
         $this->assertEquals('Edge', $sent_request->getHeaderLine('Apigee'));
@@ -105,7 +105,7 @@ class BuilderTest extends TestCase
         $builder->removeHeader('Foo');
         $this->assertNotEquals($client, $builder->getHttpClient());
         $request = new Request('GET', 'http://example.com');
-        $builder->getHttpClient()->sendRequest($request);
+        $builder->getHttpClient()->sendAsyncRequest($request)->wait();
         $sent_request = self::$httpClient->getLastRequest();
         $this->assertArrayNotHasKey('Foo', $sent_request->getHeaders());
     }
@@ -121,7 +121,7 @@ class BuilderTest extends TestCase
         $builder->clearHeaders();
         $this->assertNotEquals($client, $builder->getHttpClient());
         $request = new Request('GET', 'http://example.com');
-        $builder->getHttpClient()->sendRequest($request);
+        $builder->getHttpClient()->sendAsyncRequest($request)->wait();
         $sent_request = self::$httpClient->getLastRequest();
         $this->assertArrayNotHasKey('Foo', $sent_request->getHeaders());
         $this->assertArrayNotHasKey('Bar', $sent_request->getHeaders());
@@ -136,7 +136,7 @@ class BuilderTest extends TestCase
         $builder->addPlugin(new AddPathPlugin($uriFactory->createUri('edge')));
         $this->assertNotEquals($client, $builder->getHttpClient());
         $request = new Request('GET', 'http://example.com');
-        $builder->getHttpClient()->sendRequest($request);
+        $builder->getHttpClient()->sendAsyncRequest($request)->wait();
         $sent_request = self::$httpClient->getLastRequest();
         $this->assertEquals('/edge', $sent_request->getUri()->getPath());
 
@@ -154,7 +154,7 @@ class BuilderTest extends TestCase
         $builder->removePlugin(AddPathPlugin::class);
         $this->assertNotEquals($client, $builder->getHttpClient());
         $request = new Request('GET', 'http://example.com');
-        $builder->getHttpClient()->sendRequest($request);
+        $builder->getHttpClient()->sendAsyncRequest($request)->wait();
         $sent_request = self::$httpClient->getLastRequest();
         $this->assertEmpty($sent_request->getUri()->getPath());
     }
@@ -167,12 +167,12 @@ class BuilderTest extends TestCase
         $headers = ['Foo' => 'bar'];
         $builder->setHeaders($headers);
         $client = $builder->getHttpClient();
-        $builder->getHttpClient()->sendRequest(new Request('GET', 'http://example.com'));
+        $builder->getHttpClient()->sendAsyncRequest(new Request('GET', 'http://example.com'))->wait();
         $sent_request = self::$httpClient->getLastRequest();
         $this->assertEquals($sent_request->getHeaderLine('Foo'), $headers['Foo']);
         $this->assertEquals('/edge', $sent_request->getUri()->getPath());
         $builder->clearPlugins();
-        $builder->getHttpClient()->sendRequest(new Request('GET', 'http://example.com'));
+        $builder->getHttpClient()->sendAsyncRequest(new Request('GET', 'http://example.com'))->wait();
         $sent_request = self::$httpClient->getLastRequest();
         $this->assertNotEquals($client, $builder->getHttpClient());
         $this->assertEmpty($sent_request->getHeaderLine('Foo'));

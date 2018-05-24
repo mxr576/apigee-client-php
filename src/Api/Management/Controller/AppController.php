@@ -65,7 +65,7 @@ class AppController extends CpsLimitEntityController implements AppControllerInt
      */
     public function loadApp(string $appId): AppInterface
     {
-        $response = $this->client->get($this->getEntityEndpointUri($appId));
+        $response = $this->client->get($this->getEntityEndpointUri($appId))->wait();
 
         return $this->entityTransformer->denormalize(
             // Pass it as an object, because if serializer would have been used here (just as other places) it would
@@ -226,6 +226,6 @@ class AppController extends CpsLimitEntityController implements AppControllerInt
         }
         $uri = $this->getBaseEndpointUri()->withQuery(http_build_query($queryParams));
 
-        return $this->client->get($uri);
+        return $this->client->get($uri)->wait();
     }
 }

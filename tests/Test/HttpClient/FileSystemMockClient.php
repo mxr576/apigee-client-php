@@ -18,8 +18,9 @@
 
 namespace Apigee\Edge\Tests\Test\HttpClient;
 
-use Http\Client\Common\HttpAsyncClientEmulator;
-use Http\Client\HttpClient;
+use Http\Client\Exception;
+use Http\Client\Promise\HttpFulfilledPromise;
+use Http\Client\Promise\HttpRejectedPromise;
 use League\Flysystem\AdapterInterface;
 use Psr\Http\Message\RequestInterface;
 
@@ -30,8 +31,6 @@ use Psr\Http\Message\RequestInterface;
  */
 class FileSystemMockClient implements MockClientInterface
 {
-    use HttpAsyncClientEmulator;
-
     /** @var FileSystemResponseFactory */
     private $fileSystemResponseFactory;
 
@@ -48,10 +47,14 @@ class FileSystemMockClient implements MockClientInterface
     /**
      * {@inheritdoc}
      *
-     * @see HttpClient::sendRequest
+     * @see HttpAsyncClient::sendAsyncRequest
      */
-    public function sendRequest(RequestInterface $request)
+    public function sendAsyncRequest(RequestInterface $request)
     {
-        return $this->fileSystemResponseFactory->createResponseForRequest($request, 200, null, ['Content-Type' => 'application/json']);
+        try {
+            return new HttpFulfilledPromise($this->fileSystemResponseFactory->createResponseForRequest($request, 200, null, ['Content-Type' => 'application/json']));
+        } catch (Exception $e) {
+            return new HttpRejectedPromise($e);
+        }
     }
 }

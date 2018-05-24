@@ -61,7 +61,7 @@ class CompanyMembersController extends AbstractController implements CompanyMemb
      */
     public function getMembers(): CompanyMembership
     {
-        $response = $this->client->get($this->getBaseEndpointUri());
+        $response = $this->client->get($this->getBaseEndpointUri())->wait();
 
         return $this->serializer->denormalize($this->responseToArray($response), CompanyMembership::class);
     }
@@ -71,7 +71,7 @@ class CompanyMembersController extends AbstractController implements CompanyMemb
      */
     public function setMembers(CompanyMembership $members): CompanyMembership
     {
-        $response = $this->client->post($this->getBaseEndpointUri(), $this->serializer->serialize($members, 'json'));
+        $response = $this->client->post($this->getBaseEndpointUri(), $this->serializer->serialize($members, 'json'))->wait();
 
         return $this->serializer->denormalize($this->responseToArray($response), CompanyMembership::class);
     }
@@ -81,7 +81,7 @@ class CompanyMembersController extends AbstractController implements CompanyMemb
      */
     public function removeMember(string $email): void
     {
-        $this->client->delete($this->getBaseEndpointUri()->withPath("{$this->getBaseEndpointUri()->getPath()}/{$email}"));
+        $this->client->delete($this->getBaseEndpointUri()->withPath("{$this->getBaseEndpointUri()->getPath()}/{$email}"))->wait();
     }
 
     /**

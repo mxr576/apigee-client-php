@@ -25,7 +25,7 @@ use Apigee\Edge\Tests\Test\HttpClient\DebuggerClient;
 use Apigee\Edge\Tests\Test\HttpClient\FileSystemMockClient;
 use Apigee\Edge\Tests\Test\HttpClient\MockClientInterface;
 use Apigee\Edge\Tests\Test\HttpClient\Plugin\NullAuthentication;
-use Http\Client\HttpClient;
+use Http\Client\HttpAsyncClient;
 use Http\Message\Authentication\BasicAuth;
 use Http\Message\Formatter\CurlCommandFormatter;
 use Http\Mock\Client as MockClient;
@@ -58,12 +58,12 @@ class TestClientFactory
     {
         $fqcn = $fqcn ?: getenv('APIGEE_EDGE_PHP_SDK_HTTP_CLIENT') ?: FileSystemMockClient::class;
         $rc = new \ReflectionClass($fqcn);
-        if (!$rc->implementsInterface(MockClientInterface::class) && !$rc->implementsInterface(HttpClient::class)) {
+        if (!$rc->implementsInterface(MockClientInterface::class) && !$rc->implementsInterface(HttpAsyncClient::class)) {
             throw new \InvalidArgumentException(
                 sprintf(
                     'Class must implements either %s interface or %s interface.',
                     MockClientInterface::class,
-                    HttpClient::class
+                    HttpAsyncClient::class
                 )
             );
         }
