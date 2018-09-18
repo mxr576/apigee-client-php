@@ -18,12 +18,15 @@
 
 namespace Apigee\Edge\Tests\Test\Controller;
 
+use Apigee\Edge\ClientInterface;
 use Apigee\Edge\Tests\Test\TestClientFactory;
 use Faker\Factory;
 use PHPUnit\Framework\TestCase;
 
 abstract class AbstractControllerValidator extends TestCase
 {
+    use ClientAwareTestTrait;
+
     /** @var \Apigee\Edge\ClientInterface */
     protected static $client;
 
@@ -41,5 +44,10 @@ abstract class AbstractControllerValidator extends TestCase
         parent::setUpBeforeClass();
         static::$random = Factory::create();
         static::$client = (new TestClientFactory())->getClient();
+    }
+
+    protected static function getClient(): ClientInterface
+    {
+        return static::$client;
     }
 }
