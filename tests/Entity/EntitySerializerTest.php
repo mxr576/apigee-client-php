@@ -46,7 +46,7 @@ use SebastianBergmann\Comparator\Factory as ComparisonFactory;
  */
 class EntitySerializerTest extends TestCase
 {
-    /** @var \Apigee\Edge\Normalizer\EntityNormalizer */
+    /** @var \Apigee\Edge\Normalizer\ObjectNormalizer */
     protected static $normalizer;
 
     /**
