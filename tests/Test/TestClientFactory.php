@@ -26,6 +26,7 @@ use Apigee\Edge\Tests\Test\HttpClient\DebuggerClient;
 use Apigee\Edge\Tests\Test\HttpClient\FileSystemMockClient;
 use Apigee\Edge\Tests\Test\HttpClient\MockClientInterface;
 use Apigee\Edge\Tests\Test\HttpClient\Plugin\NullAuthentication;
+use GuzzleHttp\Psr7\Response;
 use Http\Client\Exception;
 use Http\Client\HttpClient;
 use Http\Message\Authentication\BasicAuth;
@@ -90,6 +91,12 @@ class TestClientFactory
             $formatter = new CurlCommandFormatter();
             $logFormat = "{request_formatted}\nStats: {time_stats}\n\n";
             $builder = new Builder($rc->newInstance([], $formatter, $logger, $logFormat));
+        } elseif (MockClient::class === $rc->getName()) {
+            /** @var \Http\Mock\Client $httpClient */
+            $httpClient = $rc->newInstance();
+            // Return a valid (empty) JSON as default response.
+            $httpClient->setDefaultResponse(new Response(200, ['Content-Type' => 'application/json'], json_encode((object) [[]])));
+            $builder = new Builder($httpClient);
         } else {
             $builder = new Builder($rc->newInstance());
         }
