@@ -27,7 +27,7 @@ abstract class AbstractControllerValidator extends TestCase
 {
     use ClientAwareTestTrait;
 
-    /** @var \Apigee\Edge\ClientInterface */
+    /** @var \Apigee\Edge\Tests\Test\OnlineClientInterface|\Apigee\Edge\Tests\Test\OfflineClientInterface */
     protected static $client;
 
     /** @var \Faker\Generator */
