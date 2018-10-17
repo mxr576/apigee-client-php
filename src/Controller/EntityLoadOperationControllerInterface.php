@@ -16,9 +16,9 @@
  * limitations under the License.
  */
 
-namespace Apigee\Edge\Api\Monetization\Controller;
+namespace Apigee\Edge\Controller;
 
-use Apigee\Edge\Api\Monetization\Entity\EntityInterface;
+use Apigee\Edge\Entity\EntityInterface;
 
 interface EntityLoadOperationControllerInterface
 {
@@ -26,8 +26,10 @@ interface EntityLoadOperationControllerInterface
      * Loads an entity by ID from Apigee Edge.
      *
      * @param string $entityId
+     *   Id of the entity.
      *
-     * @return \Apigee\Edge\Api\Monetization\Entity\EntityInterface
+     * @return \Apigee\Edge\Entity\EntityInterface
+     *   Entity object.
      */
     public function load(string $entityId): EntityInterface;
 }

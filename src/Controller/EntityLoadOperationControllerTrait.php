@@ -16,16 +16,14 @@
  * limitations under the License.
  */
 
-namespace Apigee\Edge\Api\Monetization\Controller;
+namespace Apigee\Edge\Controller;
 
-use Apigee\Edge\Api\Monetization\Entity\EntityInterface;
-use Apigee\Edge\Controller\ClientAwareControllerTrait;
-use Apigee\Edge\Controller\EntitySerializerAwareTrait;
+use Apigee\Edge\Entity\EntityInterface;
 
 /**
  * Trait EntityLoadOperationControllerTrait.
  *
- * @see \Apigee\Edge\Api\Monetization\Controller\EntityLoadOperationControllerInterface
+ * @see \Apigee\Edge\Controller\EntityLoadOperationControllerInterface
  */
 trait EntityLoadOperationControllerTrait
 {

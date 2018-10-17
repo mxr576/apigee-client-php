@@ -16,16 +16,17 @@
  * limitations under the License.
  */
 
-namespace Apigee\Edge\Api\Monetization\Controller;
+namespace Apigee\Edge\Controller;
 
-use Apigee\Edge\Api\Monetization\Entity\EntityInterface;
+use Apigee\Edge\Entity\EntityInterface;
 
 interface EntityUpdateControllerOperationInterface
 {
     /**
      * Updates an entity in Apigee Edge.
      *
-     * @param \Apigee\Edge\Api\Monetization\Entity\EntityInterface $entity
+     * @param \Apigee\Edge\Entity\EntityInterface $entity
+     *   Entity object with changes.
      */
     public function update(EntityInterface $entity): void;
 }

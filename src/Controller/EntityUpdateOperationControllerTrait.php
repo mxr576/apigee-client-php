@@ -16,17 +16,14 @@
  * limitations under the License.
  */
 
-namespace Apigee\Edge\Api\Monetization\Controller;
+namespace Apigee\Edge\Controller;
 
-use Apigee\Edge\Api\Monetization\Entity\EntityInterface;
-use Apigee\Edge\Controller\ClientAwareControllerTrait;
-use Apigee\Edge\Controller\EntityEndpointAwareControllerTrait;
-use Apigee\Edge\Controller\EntitySerializerAwareTrait;
+use Apigee\Edge\Entity\EntityInterface;
 
 /**
  * Trait EntityUpdateOperationControllerTrait.
  *
- * @see \Apigee\Edge\Api\Monetization\Controller\EntityUpdateControllerOperationInterface
+ * @see \Apigee\Edge\Controller\EntityUpdateControllerOperationInterface
  */
 trait EntityUpdateOperationControllerTrait
 {
@@ -37,14 +34,15 @@ trait EntityUpdateOperationControllerTrait
     /**
      * @inheritdoc
      *
-     * @psalm-suppress PossiblyNullArgument $entity->id() is always not null here.
+     * @psalm-suppress PossiblyNullArgument $entity->id() is not null here.
      */
     public function update(EntityInterface $entity): void
     {
         $uri = $this->getEntityEndpointUri($entity->id());
-        $payload = $this->getEntitySerializer()->serialize($entity, 'json');
-        // Update an existing entity.
-        $response = $this->getClient()->put($uri, $payload);
+        $response = $this->getClient()->put(
+            $uri,
+            $this->getEntitySerializer()->serialize($entity, 'json')
+        );
         $this->getEntitySerializer()->setPropertiesFromResponse($response, $entity);
     }
 }
