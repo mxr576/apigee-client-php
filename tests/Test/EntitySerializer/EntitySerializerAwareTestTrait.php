@@ -16,12 +16,16 @@
  * limitations under the License.
  */
 
-namespace Apigee\Edge\Tests\Api\Monetization\EntitySerializer\PropertyValidator;
+namespace Apigee\Edge\Tests\Test\EntitySerializer;
 
-interface PropertyValidatorsAwareValidatorInterface
+use Apigee\Edge\Serializer\EntitySerializerInterface;
+
+trait EntitySerializerAwareTestTrait
 {
     /**
-     * @param \Apigee\Edge\Tests\Api\Monetization\EntitySerializer\PropertyValidator\PropertyValidatorInterface[] $validators
+     * Returns the entity serializer used by the tested controller.
+     *
+     * @return \Apigee\Edge\Serializer\EntitySerializerInterface
      */
-    public function setPropertyValidators(array $validators): void;
+    abstract protected function entitySerializer(): EntitySerializerInterface;
 }

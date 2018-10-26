@@ -16,18 +16,18 @@
  * limitations under the License.
  */
 
-namespace Apigee\Edge\Tests\Api\Monetization\EntitySerializer;
+namespace Apigee\Edge\Tests\Test\EntitySerializer;
 
-use Apigee\Edge\Api\Monetization\Entity\EntityInterface;
+use Apigee\Edge\Entity\EntityInterface;
 use Apigee\Edge\Serializer\EntitySerializer;
 use Apigee\Edge\Serializer\EntitySerializerInterface;
-use Apigee\Edge\Tests\Api\Monetization\EntitySerializer\PropertyValidator\PropertyValidatorsAwareValidatorInterface;
-use Apigee\Edge\Tests\Api\Monetization\EntitySerializer\PropertyValidator\PropertyValidatorTrait;
-use Apigee\Edge\Tests\Api\Monetization\EntitySerializer\PropertyValidator\SerializerAwarePropertyValidatorInterface;
+use Apigee\Edge\Tests\Test\EntitySerializer\PropertyValidator\PropertyValidatorsAwareValidatorInterface;
+use Apigee\Edge\Tests\Test\EntitySerializer\PropertyValidator\PropertyValidatorsAwareValidatorTrait;
+use Apigee\Edge\Tests\Test\EntitySerializer\PropertyValidator\SerializerAwarePropertyValidatorInterface;
 
 class EntitySerializerValidator implements EntitySerializerValidatorInterface
 {
-    use PropertyValidatorTrait;
+    use PropertyValidatorsAwareValidatorTrait;
 
     /**
      * @var \Apigee\Edge\Serializer\EntitySerializerInterface
@@ -59,6 +59,9 @@ class EntitySerializerValidator implements EntitySerializerValidatorInterface
         }
     }
 
+    /**
+     * @inheritdoc
+     */
     public function validate(\stdClass $input, EntityInterface $entity): void
     {
         $output = json_decode($this->serializer->serialize($entity, 'json'));
