@@ -18,7 +18,7 @@
 
 namespace Apigee\Edge\HttpClient\Utility;
 
-use Http\Client\Exception;
+use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -50,10 +50,7 @@ final class Journal implements JournalInterface
     private $success = true;
 
     /**
-     * Record a successful call.
-     *
-     * @param \Psr\Http\Message\RequestInterface $request Request use to make the call
-     * @param \Psr\Http\Message\ResponseInterface $response Response returned by the call
+     * @inheritdoc
      */
     public function addSuccess(RequestInterface $request, ResponseInterface $response): void
     {
@@ -63,12 +60,9 @@ final class Journal implements JournalInterface
     }
 
     /**
-     * Record a failed call.
-     *
-     * @param \Psr\Http\Message\RequestInterface $request Request use to make the call
-     * @param \Http\Client\Exception $exception Exception returned by the call
+     * @inheritdoc
      */
-    public function addFailure(RequestInterface $request, Exception $exception): void
+    public function addFailure(RequestInterface $request, ClientExceptionInterface $exception): void
     {
         $this->lastRequest = $request;
         $this->lastException = $exception;

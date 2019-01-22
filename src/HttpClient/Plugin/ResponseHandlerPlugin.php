@@ -30,6 +30,7 @@ use Http\Client\Exception\HttpException;
 use Http\Client\Exception\RequestException;
 use Http\Message\Formatter;
 use Http\Message\Formatter\FullHttpMessageFormatter;
+use Http\Promise\Promise;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -57,8 +58,7 @@ final class ResponseHandlerPlugin implements Plugin
      * @psalm-suppress UndefinedMethod - $e->getResponse() is not undefined.
      * @psalm-suppress InvalidArgument - $e is not an invalid argument.
      */
-    public function handleRequest(RequestInterface $request, callable $next, callable $first)
-    {
+    public function handleRequest(RequestInterface $request, callable $next, callable $first): Promise {
         return $next($request)->then(function (ResponseInterface $response) use ($request) {
             return $this->decodeResponse($response, $request);
         }, function (Exception $e) use ($request): void {
