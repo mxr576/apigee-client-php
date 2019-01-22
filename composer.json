@@ -25,7 +25,6 @@
         "php-http/message": "^1.0",
         "php-http/message-factory": "^1.0",
         "phpdocumentor/reflection-docblock": "^3.0 || ^4.0",
-        "psr/cache": "^1.0",
         "psr/http-message": "^1.0",
         "symfony/options-resolver": "^3.4 || ^4.0",
         "symfony/property-access": "^3.4 || ^4.0",
@@ -45,7 +44,6 @@
         "phpmetrics/phpmetrics": "^2.3",
         "phpunit/phpunit": "^6.4.0",
         "sebastian/comparator": "^2.1",
-        "symfony/cache": "~3.4|~4.0",
         "vimeo/psalm": "^2.0.0"
     },
     "conflict": {
@@ -85,9 +83,6 @@
             "dev-2.x": "2.0.x-dev"
         },
         "patches": {
-            "php-http/client-common": {
-                "Path prefix must be present #113": "https://github.com/php-http/client-common/pull/113.diff"
-            }
         }
     }
 }
